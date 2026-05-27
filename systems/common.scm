@@ -39,7 +39,7 @@
   ;; Packages
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
-  #:use-module (gnu packages certs)
+  #:use-module (gnu packages nss)            ; nss-certs
   #:use-module (gnu packages curl)
   #:use-module (gnu packages emacs)          ; emacs-pgtk (fallback base)
   #:use-module (gnu packages emacs-xyz)
@@ -102,6 +102,9 @@
 ;; Base packages — every machine
 ;; ---------------------------------------------------------------------------
 
+;; Capture upstream %base-packages before we shadow the name.
+(define %upstream-base-packages %base-packages)
+
 (define-public %base-packages
   (append
    (list nss-certs
@@ -117,7 +120,7 @@
          man-pages
          password-store
          brightnessctl)
-   %base-packages))  ; upstream Guix %base-packages
+   %upstream-base-packages))
 
 ;; ---------------------------------------------------------------------------
 ;; Base services — every machine

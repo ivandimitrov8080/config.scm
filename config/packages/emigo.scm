@@ -13,7 +13,8 @@
   #:use-module (guix build-system emacs)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages python)
-  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages python-xyz)     ; python-networkx
+  #:use-module (gnu packages python-build)   ; python-pygments
   #:export (emacs-emigo))
 
 (define-public emacs-emigo
