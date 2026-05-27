@@ -7,6 +7,8 @@
 ;; After pushing the repo for the first time, pin the config channel by
 ;; adding: (commit "FIRST-COMMIT-HASH") and removing (branch "master").
 
+(use-modules (guix channels))
+
 (list (channel
         (name 'config)
         (url "https://github.com/ivandimitrov8080/config.scm")
