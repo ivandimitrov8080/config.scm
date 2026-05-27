@@ -32,7 +32,7 @@
          (file-name (git-file-name name version))
          (sha256
           ;; Run: guix hash -rx . (in the fetched source directory)
-          (base32 "0rd8wys8vsc6px8cymc0cgjfp2f8fzr8dkqqprs0c3cdaqvk7gip"))))
+          (base32 "1amplsqrdfw8djmam6j97sc82b474cpr3h9n1665h1ap6flsahy0"))))
       (build-system emacs-build-system)
       ;; emigo spawns a Python subprocess for its AI backend.
       ;; These are runtime dependencies placed on PATH via propagated-inputs.
