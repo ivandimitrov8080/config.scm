@@ -10,10 +10,6 @@
 (use-modules (guix channels))
 
 (list (channel
-        (name 'config)
-        (url "https://github.com/ivandimitrov8080/config.scm")
-        (branch "master"))  ; TODO: replace with (commit "...") after first push
-      (channel
         (name 'guix)
         (url "https://codeberg.org/guix/guix.git")
         (commit "41111228d516bf834bce5ad4b92fc7dfef1187de")
