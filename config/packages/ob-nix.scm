@@ -27,7 +27,7 @@
          (sha256
           ;; Run: guix hash -rx . (in the fetched source directory)
           ;; or:  guix download <tarball-url>
-          (base32 "0000000000000000000000000000000000000000000000000000"))))
+          (base32 "0il5zpr28drfxf5n63c7m2cg8j2r8qapj9sc7k9r6a4dl5rlbg6z"))))
       (build-system emacs-build-system)
       (synopsis "Org-babel support for Nix")
       (description

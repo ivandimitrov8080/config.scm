@@ -1,13 +1,17 @@
-;; channels.scm — copy to ~/.config/guix/channels.scm
+;; channels.scm — copy to ~/.config/guix/channels.scm, OR use directly with:
+;;   guix time-machine --channels=channels.scm -- system vm -L . systems/vm.scm
 ;;
-;; Usage:
-;;   cp channels.scm ~/.config/guix/channels.scm
-;;   guix pull
+;; NOTE: `guix system' does NOT read this file automatically.  Always use
+;; `guix time-machine --channels=channels.scm' to get a reproducible build.
 ;;
-;; After pulling, (config packages emacs) and other modules are available.
+;; After pushing the repo for the first time, pin the config channel by
+;; adding: (commit "FIRST-COMMIT-HASH") and removing (branch "master").
 
-(cons* (channel
-         (name 'config)
-         (url "https://github.com/ivand/config.scm")  ; update with your actual URL
-         (branch "main"))
-       %default-channels)
+(list (channel
+        (name 'config)
+        (url "https://github.com/ivandimitrov8080/config.scm")
+        (branch "master"))  ; TODO: replace with (commit "...") after first push
+      (channel
+        (name 'guix)
+        (url "https://codeberg.org/guix/guix.git")
+        (commit "f519ddf7330f6dd05c880f0135336a8e9d9ca026")))
