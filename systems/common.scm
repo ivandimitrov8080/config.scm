@@ -1,13 +1,17 @@
 ;; systems/common.scm — shared definitions reused across machine configs
 ;;
 ;; Exports:
-;;   %my-keyboard-layout   — keyboard-layout record (us+bg phonetic)
-;;   %primary-user         — user-account for ivand
-;;   %base-packages        — CLI packages for every machine
-;;   %base-services        — services for every machine
-;;   %sway-keybindings     — sway keybinding alist
-;;   %sway-config          — sway-configuration record
-;;   %desktop-home-environment — home-environment for the desktop
+;;   %my-keyboard-layout        — keyboard-layout record (us+bg phonetic)
+;;   %primary-user              — user-account for ivand
+;;   %base-packages             — CLI packages for every machine
+;;   %my-base-services          — services for every machine
+;;   %guix-service              — guix daemon service (guix-service-type)
+;;   guix-home-service-for      — helper: (user he) → guix-home-service-type
+;;   %sway-keybindings          — sway keybinding alist
+;;   %sway-config               — sway-configuration record
+;;   home-wpaperd-configuration — configuration record for wpaperd
+;;   home-wpaperd-service-type  — Guix home service for wpaperd
+;;   %desktop-home-environment  — home-environment for the desktop
 ;;
 ;; Import in any system config with:
 ;;   (use-modules (systems common))
@@ -16,6 +20,7 @@
   ;; Guix core
   #:use-module (guix gexp)
   #:use-module (guix packages)
+  #:use-module (guix records)            ; define-record-type*
 
   ;; GNU system
   #:use-module (gnu)
@@ -37,6 +42,7 @@
   #:use-module (gnu home services sway)      ; home-sway-service-type
   #:use-module (gnu home services shepherd)  ; home-shepherd-service-type
   #:use-module (gnu home services sound)     ; home-pipewire-service-type
+  #:use-module (gnu home services xdg)       ; home-xdg-configuration-files-service-type
 
   ;; Packages
   #:use-module (gnu packages base)
@@ -76,6 +82,7 @@
   ;; Custom channel packages
   #:use-module (config packages emacs)       ; emacs-ivan, %emacs-packages
   #:use-module (config packages wttrbar)     ; wttrbar
+  #:use-module (config packages wpaperd)     ; wpaperd
 
   #:export (%my-keyboard-layout
             %primary-user
@@ -87,7 +94,13 @@
             %waybar-style
             %desktop-home-environment
             %guix-service
-            guix-home-service-for))
+            guix-home-service-for
+            home-wpaperd-configuration
+            home-wpaperd-configuration?
+            home-wpaperd-configuration-wpaperd
+            home-wpaperd-configuration-path
+            home-wpaperd-configuration-duration
+            home-wpaperd-service-type))
 
 ;; ---------------------------------------------------------------------------
 ;; Keyboard layout
@@ -218,6 +231,95 @@
 (define-public (guix-home-service-for user home-env)
   (service guix-home-service-type
            (list (list user home-env))))
+
+;; ---------------------------------------------------------------------------
+;; wpaperd home service
+;;
+;; Manages the wpaperd wallpaper daemon for Wayland.  Writes
+;; ~/.config/wpaperd/wallpaper.toml, installs the package into the home
+;; profile, and registers a shepherd service so the daemon starts with the
+;; user session.
+;;
+;; Configuration:
+;;   (service home-wpaperd-service-type
+;;            (home-wpaperd-configuration
+;;             (path     "~/Pictures/bg")  ; wallpaper directory
+;;             (duration "10m")))          ; time per image
+;;
+;; The generated wallpaper.toml looks like:
+;;   [default]
+;;   path = "~/Pictures/bg"
+;;   duration = "10m"
+;;
+;; wpaperd expands ~ at startup, so the path works regardless of $HOME.
+;; ---------------------------------------------------------------------------
+
+(define-record-type* <home-wpaperd-configuration>
+  home-wpaperd-configuration make-home-wpaperd-configuration
+  home-wpaperd-configuration?
+  ;; The wpaperd package (daemon + wpaperctl CLI).
+  (wpaperd  home-wpaperd-configuration-wpaperd
+            (default wpaperd))
+  ;; Wallpaper directory for the "default" monitor section.
+  ;; Supports ~ (tilde expansion performed by wpaperd at runtime).
+  (path     home-wpaperd-configuration-path
+            (default "~/Pictures/bg"))
+  ;; How long each wallpaper is displayed before rotating.
+  ;; Uses humantime format: "30s", "10m", "2h", etc.
+  (duration home-wpaperd-configuration-duration
+            (default "10m")))
+
+(define (home-wpaperd-config-file config)
+  "Serialize HOME-WPAPERD-CONFIGURATION to a wallpaper.toml file-like object."
+  (plain-file "wallpaper.toml"
+    (string-append
+     "[default]\n"
+     "path = \"" (home-wpaperd-configuration-path config) "\"\n"
+     "duration = \"" (home-wpaperd-configuration-duration config) "\"\n")))
+
+(define (home-wpaperd-xdg-config-files config)
+  "Return the XDG config file alist for wpaperd."
+  `(("wpaperd/wallpaper.toml" ,(home-wpaperd-config-file config))))
+
+(define (home-wpaperd-shepherd-service config)
+  "Return a shepherd service that starts the wpaperd daemon."
+  (list
+   (shepherd-service
+    (provision '(wpaperd))
+    (documentation "wpaperd wallpaper daemon for Wayland.")
+    ;; No hard requirement on sway: shepherd launches it and sway connects
+    ;; to the already-running daemon via the wlr-layer-shell protocol.
+    (start #~(make-forkexec-constructor
+              (list #$(file-append
+                       (home-wpaperd-configuration-wpaperd config)
+                       "/bin/wpaperd"))))
+    (stop #~(make-kill-destructor))
+    (respawn? #t))))
+
+(define (home-wpaperd-profile-service config)
+  "Install wpaperd into the home profile so wpaperctl is on PATH."
+  (list (home-wpaperd-configuration-wpaperd config)))
+
+(define-public home-wpaperd-service-type
+  (service-type
+   (name 'home-wpaperd)
+   (extensions
+    (list
+     ;; Register the shepherd daemon.
+     (service-extension home-shepherd-service-type
+                        home-wpaperd-shepherd-service)
+     ;; Write ~/.config/wpaperd/wallpaper.toml.
+     (service-extension home-xdg-configuration-files-service-type
+                        home-wpaperd-xdg-config-files)
+     ;; Add wpaperd to the home profile (makes wpaperctl available on PATH).
+     (service-extension home-profile-service-type
+                        home-wpaperd-profile-service)))
+   (default-value (home-wpaperd-configuration))
+   (description
+    "Run @command{wpaperd}, a wallpaper daemon for Wayland compositors
+implementing the wlr-layer-shell protocol.  Writes
+@file{~/.config/wpaperd/wallpaper.toml} and registers a Shepherd service
+so the daemon starts automatically with the user session.")))
 
 ;; ---------------------------------------------------------------------------
 ;; Sway keybindings
@@ -620,6 +722,13 @@ window#waybar {
 
      ;; Sway (swayfx)
      (service home-sway-service-type %sway-config)
+
+     ;; Wallpaper daemon — rotates images from ~/Pictures/bg every 10 minutes.
+     ;; Writes ~/.config/wpaperd/wallpaper.toml and registers a shepherd service.
+     (service home-wpaperd-service-type
+              (home-wpaperd-configuration
+               (path     "~/Pictures/bg")
+               (duration "10m")))
 
      ;; Emacs init files:
      ;;   ~/.emacs.d/emacs.org  — the literate config

@@ -1,0 +1,122 @@
+#+TITLE: Custom Home Service Types
+#+OPTIONS: toc:2 num:nil
+
+* Home services
+
+Custom =service-type= definitions live in =systems/common.scm= alongside the
+rest of the shared configuration.  They follow the standard Guix home service
+pattern: a configuration record, serialization to a config file, a shepherd
+daemon, and a profile extension.
+
+** =home-wpaperd-service-type=
+
+Manages the [[file:packages.org::*wpaperd — (config packages wpaperd)][wpaperd]] wallpaper daemon for Wayland.
+
+*** What it does
+
+1. Writes =~/.config/wpaperd/wallpaper.toml= via
+   =home-xdg-configuration-files-service-type=.
+2. Installs =wpaperd= (daemon + =wpaperctl= CLI) into the home profile via
+   =home-profile-service-type=, putting =wpaperctl= on =$PATH=.
+3. Registers a Shepherd service (=provision: wpaperd=) so the daemon starts
+   automatically when the user session is activated.
+
+*** Configuration record: =home-wpaperd-configuration=
+
+#+BEGIN_SRC scheme
+(home-wpaperd-configuration
+ (wpaperd  wpaperd)          ; package — defaults to (config packages wpaperd)
+ (path     "~/Pictures/bg")  ; wallpaper directory
+ (duration "10m"))           ; time per image (humantime format)
+#+END_SRC
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| =wpaperd= | =wpaperd= from =(config packages wpaperd)= | The wpaperd package to use |
+| =path= | ="~/Pictures/bg"= | Wallpaper directory.  =~= is expanded by wpaperd at runtime. |
+| =duration= | ="10m"= | How long each image is displayed before rotating |
+
+*** Generated =wallpaper.toml=
+
+#+BEGIN_SRC toml
+[default]
+path = "~/Pictures/bg"
+duration = "10m"
+#+END_SRC
+
+The path uses =~= so it works regardless of the actual value of =$HOME=.
+wpaperd performs tilde expansion at startup.
+
+*** Usage in a =home-environment=
+
+The service is already included in =%desktop-home-environment= in
+=systems/common.scm=.  To customise it, override the service in a machine-
+specific =home-environment=:
+
+#+BEGIN_SRC scheme
+(home-environment
+ (inherit %desktop-home-environment)
+ (services
+  (cons
+   (service home-wpaperd-service-type
+            (home-wpaperd-configuration
+             (path     "~/Wallpapers")
+             (duration "30m")))
+   (filter (lambda (s)
+             (not (eq? (service-kind s) home-wpaperd-service-type)))
+           (home-environment-user-services %desktop-home-environment)))))
+#+END_SRC
+
+*** Controlling the daemon at runtime
+
+Once the session is running, use =wpaperctl= (installed by the profile
+extension):
+
+#+BEGIN_SRC sh
+wpaperctl next          # rotate to next wallpaper immediately
+wpaperctl previous      # go back to previous wallpaper
+wpaperctl get-wallpaper # print current wallpaper path
+wpaperctl pause         # pause automatic rotation
+wpaperctl resume        # resume automatic rotation
+#+END_SRC
+
+Or via Shepherd:
+
+#+BEGIN_SRC sh
+herd status wpaperd      # check daemon status
+herd stop wpaperd        # stop the daemon
+herd start wpaperd       # start the daemon
+herd restart wpaperd     # restart (e.g. after config change)
+#+END_SRC
+
+*** Implementation notes
+
+- The service does *not* add =wpaperd= to Sway's =startup-programs=.
+  Shepherd starts it as part of user session activation, before Sway even
+  launches.  When Sway's compositor connects to the wlr-layer-shell socket,
+  wpaperd is already running and renders immediately.
+
+- =respawn? #t= is set on the shepherd service so the daemon is automatically
+  restarted if it crashes.
+
+- For multiple monitors, the current configuration only generates a =[default]=
+  section.  To add per-monitor sections, extend =home-wpaperd-configuration=
+  with an additional =monitors= alist field and update =home-wpaperd-config-file=
+  to iterate over it.
+
+*** Service extensions diagram
+
+#+BEGIN_EXAMPLE
+home-wpaperd-service-type
+  │
+  ├─► home-shepherd-service-type
+  │     provision: (wpaperd)
+  │     start: wpaperd binary
+  │     respawn: yes
+  │
+  ├─► home-xdg-configuration-files-service-type
+  │     ~/.config/wpaperd/wallpaper.toml
+  │
+  └─► home-profile-service-type
+        installs: wpaperd package (wpaperd + wpaperctl)
+#+END_EXAMPLE

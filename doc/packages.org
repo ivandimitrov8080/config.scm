@@ -1,0 +1,123 @@
+#+TITLE: Custom Channel Packages
+#+OPTIONS: toc:2 num:nil
+
+* Custom packages
+
+All packages live under =config/packages/= and belong to the
+=(config packages ...)= module namespace, making them valid Guix channel
+packages automatically discoverable when this repo is used as a channel.
+
+** =emacs-ivan= — =(config packages emacs)=
+
+A custom Emacs build that extends =emacs-pgtk= with a curated set of
+packages as =propagated-inputs=.  Because they are propagated, all packages
+land on the Emacs load-path automatically without any =package-initialize=
+call.
+
+Notable groups:
+
+| Category | Packages |
+|----------|----------|
+| Completion | vertico, orderless, marginalia, consult |
+| AI | gptel, emigo |
+| Editing | avy, smartparens, undo-tree |
+| Dev | magit, projectile, company, flycheck |
+| LSP | eglot (built-in) |
+| Languages | nix, elm, haskell, web, js2, json, markdown, yaml |
+| Org | htmlize, ob-nix |
+| Tree-sitter | treesit-auto |
+| UI | doom-modeline, rainbow-delimiters, catppuccin, all-the-icons |
+| Mail | notmuch |
+
+Also exports =%emacs-packages=, the raw list of package objects.
+
+** =emacs-emigo= — =(config packages emigo)=
+
+[[https://github.com/MatthewZMD/emigo][emigo]] — agentic AI coding assistant for Emacs, not yet in upstream Guix.
+Pinned to a specific git commit.  Runtime deps: =python=,
+=python-networkx=, =python-pygments=.
+
+** =emacs-ob-nix= — =(config packages ob-nix)=
+
+[[https://github.com/AntonHakansson/ob-nix][ob-nix]] — Org-babel support for Nix code blocks.  Not in upstream Guix.
+Pinned to a specific git commit.
+
+** =wttrbar= — =(config packages wttrbar)=
+
+[[https://github.com/bjesus/wttrbar][wttrbar]] — Waybar weather widget using wttr.in.  Rust/Cargo package, not
+in upstream Guix.  Crate dependencies are vendored in
+=config/packages/wttrbar-crates.scm= (auto-generated from =Cargo.lock=).
+
+Used by =%waybar-config= via =file-append= to splice the store path of
+the =wttrbar= binary directly into the Waybar JSON config at build time.
+
+** =wpaperd= — =(config packages wpaperd)=
+
+[[https://github.com/danyspin97/wpaperd][wpaperd]] v1.3.0 — wallpaper daemon for Wayland compositors implementing the
+=wlr-layer-shell= protocol (Sway, Hyprland, river, etc.).
+
+Not in upstream Guix.  Added as a custom channel package.
+
+*** What it provides
+
+Two binaries are installed:
+
+- =wpaperd= :: the background daemon.  Reads =~/.config/wpaperd/wallpaper.toml=,
+  sets per-monitor wallpapers via EGL/OpenGL and wlr-layer-shell.
+- =wpaperctl= :: CLI control tool.  Supports =next=, =previous=,
+  =get-wallpaper=, =pause=, =resume=, and more.
+
+*** Configuration format
+
+=wallpaper.toml= uses TOML with one section per monitor.  The section name
+is the monitor's output name (e.g. =eDP-1=) or =default= as a fallback:
+
+#+BEGIN_SRC toml
+[default]
+path = "~/Pictures/bg"
+duration = "10m"
+
+[eDP-1]
+path = "~/Pictures/laptop-bg"
+duration = "30m"
+#+END_SRC
+
+Supported fields per section:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| =path= | string | Directory or file.  Supports =~= (tilde expansion). |
+| =duration= | humantime string | Time per image: =30s=, =10m=, =2h=, etc. |
+| =sorting= | enum | =random= (default), =alphabetical=, =reverse-alphabetical= |
+| =mode= | enum | =crop= (default), =fit=, =stretch=, =center=, =tile= |
+| =recursive= | bool | Recurse into subdirectories (default: =true=) |
+| =transition-time= | integer | Crossfade duration in ms |
+| =apply-shadow= | bool | Apply drop shadow to centered/fit images |
+
+*** Build details
+
+- Build system: =cargo-build-system=
+- Source: GitHub tag =1.3.0=
+- Crate stubs: =config/packages/wpaperd-crates.scm= (284 crates, auto-generated
+  from =Cargo.lock= using the same nix-base32 checksum conversion as wttrbar)
+- Native inputs: =pkg-config=
+- Propagated inputs: =wayland=, =mesa= (required for =wayland-egl= /
+  =khronos-egl= OpenGL rendering)
+- Build flags: =--workspace= (builds all workspace members: daemon + CLI)
+
+*** Regenerating the crates file
+
+If the package is updated to a new version, regenerate =wpaperd-crates.scm=
+by fetching the new =Cargo.lock= and running the generation script:
+
+#+BEGIN_SRC sh
+curl -sL https://raw.githubusercontent.com/danyspin97/wpaperd/<TAG>/Cargo.lock \
+  > /tmp/wpaperd-cargo.lock
+
+python3 scripts/gen-crates.py wpaperd /tmp/wpaperd-cargo.lock \
+  > config/packages/wpaperd-crates.scm
+#+END_SRC
+
+The =gen-crates.py= script converts hex SHA-256 checksums to Nix base-32 and
+emits the =define-cargo-inputs= lookup table in the same format as
+=wttrbar-crates.scm=.

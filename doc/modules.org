@@ -1,0 +1,134 @@
+#+TITLE: Module Reference
+#+OPTIONS: toc:2 num:nil
+
+* Modules
+
+** =(systems common)= — =systems/common.scm=
+
+The central shared module.  All definitions intended for reuse across
+machines are defined and exported here.  Import it with:
+
+#+BEGIN_SRC scheme
+(use-modules (systems common))
+#+END_SRC
+
+*** Exports
+
+| Symbol | Type | Description |
+|--------|------|-------------|
+| =%my-keyboard-layout= | =keyboard-layout= | =us,bg= with phonetic Bulgarian, =Win+Space= toggle |
+| =%primary-user= | =user-account= | =ivand=, groups: =wheel audio video input netdev= |
+| =%base-packages= | list | System-wide CLI packages appended to Guix's =%base-packages= |
+| =%my-base-services= | list | =network-manager= + =wpa-supplicant= (real hardware only) |
+| =%guix-service= | =service= | Guix daemon (=guix-service-type=, default config) |
+| =guix-home-service-for= | procedure | =(user he)= → =guix-home-service-type= service |
+| =%sway-keybindings= | alist | Full Sway keybinding map |
+| =%sway-config= | =sway-configuration= | SwayFX compositor config |
+| =%waybar-config= | =mixed-text-file= | Waybar JSON config (=wttrbar= store path spliced in) |
+| =%waybar-style= | =plain-file= | Waybar CSS (Catppuccin Mocha) |
+| =home-wpaperd-configuration= | record type | Configuration for the wpaperd home service |
+| =home-wpaperd-service-type= | =service-type= | Guix home service for wpaperd |
+| =%desktop-home-environment= | =home-environment= | Full desktop home environment |
+
+*** =%base-packages= contents
+
+#+BEGIN_SRC scheme
+;; Core
+coreutils, which, diffutils
+
+;; Network / download
+curl, wget
+
+;; Version control
+git
+
+;; Remote access
+openssh
+
+;; Shell
+bash, bash-completion
+
+;; Editors
+vim
+
+;; File inspection
+file, tree
+
+;; Archives
+zip, unzip
+
+;; Process / system inspection
+htop, lsof, strace
+
+;; Networking tools
+nmap, netcat
+
+;; Text processing
+ripgrep, jq
+
+;; File transfer / sync
+rsync
+
+;; Disk usage
+ncdu
+
+;; Terminal multiplexer
+tmux
+
+;; Fonts
+font-dejavu, font-liberation
+
+;; Docs
+man-pages
+
+;; Security
+password-store
+
+;; Hardware
+brightnessctl
+#+END_SRC
+
+*** =guix-home-service-for=
+
+A convenience procedure that wraps =guix-home-service-type= for a single user.
+
+#+BEGIN_SRC scheme
+(guix-home-service-for "ivand" %vm-home-environment)
+;; expands to:
+;; (service guix-home-service-type
+;;          (list (list "ivand" %vm-home-environment)))
+#+END_SRC
+
+Used in =systems/vm.scm= to wire the home environment into the OS at boot.
+
+** =(systems desktop)= — =systems/desktop.scm=
+
+Minimal entry point for =guix home reconfigure= on the real machine.
+Contains only:
+
+#+BEGIN_SRC scheme
+(use-modules (systems common))
+%desktop-home-environment
+#+END_SRC
+
+*Usage:*
+#+BEGIN_SRC sh
+guix home reconfigure -L . systems/desktop.scm
+#+END_SRC
+
+** =(systems vm)= — =systems/vm.scm=
+
+Full =operating-system= for QEMU VM testing.  Inherits
+=%desktop-home-environment= and adds a =home-bash-service-type= stanza to
+auto-start Sway on tty1.  Wires the home environment into the OS at boot
+via =guix-home-service-for=.
+
+Key differences from a real machine:
+
+- Uses =dhcpcd-service-type= instead of =network-manager-service-type=.
+- Empty user password (PAM allows empty passwords).
+- =%wheel NOPASSWD: ALL= in sudoers.
+- Virtio kernel modules in =initrd-modules=.
+- Sway auto-starts from =.bash_profile= instead of a display manager.
+
+See =systems/vm.scm= for full inline usage instructions.
