@@ -64,6 +64,7 @@
 
   ;; Custom channel packages
   #:use-module (config packages emacs)       ; emacs-ivan, %emacs-packages
+  #:use-module (config packages wttrbar)     ; wttrbar
 
   #:export (%my-keyboard-layout
             %primary-user
@@ -71,6 +72,8 @@
             %my-base-services
             %sway-keybindings
             %sway-config
+            %waybar-config
+            %waybar-style
             %desktop-home-environment))
 
 ;; ---------------------------------------------------------------------------
@@ -295,6 +298,181 @@
       ))))
 
 ;; ---------------------------------------------------------------------------
+;; Waybar
+;; ---------------------------------------------------------------------------
+
+;; Waybar config as a mixed-text-file so the wttrbar store path is
+;; spliced in at build time without needing a computed-file gexp.
+(define %waybar-config
+  (mixed-text-file "waybar-config"
+    "[{\n"
+    "  \"layer\": \"top\",\n"
+    "  \"position\": \"top\",\n"
+    "  \"height\": 30,\n"
+    "  \"output\": [\"eDP-1\", \"HDMI-A-1\", \"*\"],\n"
+    "  \"modules-left\": [\"sway/workspaces\", \"sway/mode\"],\n"
+    "  \"modules-center\": [\"clock#week\", \"clock#year\", \"clock#time\"],\n"
+    "  \"modules-right\": [\"custom/weather\", \"network\", \"wireplumber#sink\", \"wireplumber#source\", \"battery\"],\n"
+    "  \"clock#time\": {\"interval\": 1, \"format\": \"{:%H:%M:%S}\", \"tooltip\": false},\n"
+    "  \"clock#week\": {\"format\": \"{:%a}\", \"tooltip\": false},\n"
+    "  \"clock#year\": {\"format\": \"{:%Y-%m-%d}\", \"tooltip\": false},\n"
+    "  \"battery\": {\n"
+    "    \"interval\": 1,\n"
+    "    \"format\": \"{icon} {capacity}% {time}\",\n"
+    "    \"format-time\": \" {H} h {M} m\",\n"
+    "    \"format-icons\": [\"\", \"\", \"\", \"\", \"\"],\n"
+    "    \"states\": {\"warning\": 30, \"critical\": 15},\n"
+    "    \"tooltip\": false\n"
+    "  },\n"
+    "  \"wireplumber#sink\": {\n"
+    "    \"node-type\": \"Audio/Sink\",\n"
+    "    \"format\": \"{volume}% <span color='#a6e3a1'>{icon}</span>\",\n"
+    "    \"format-muted\": \"{volume}% <span color='#f38ba8'>󰝟</span>\",\n"
+    "    \"format-icons\": [\"\", \"\", \"\"],\n"
+    "    \"max-volume\": 200,\n"
+    "    \"scroll-step\": 0.2\n"
+    "  },\n"
+    "  \"wireplumber#source\": {\n"
+    "    \"node-type\": \"Audio/Source\",\n"
+    "    \"format\": \"{volume}% <span color='#a6e3a1'></span>\",\n"
+    "    \"format-muted\": \"{volume}% <span color='#f38ba8'></span>\",\n"
+    "    \"max-volume\": 200,\n"
+    "    \"scroll-step\": 0.2\n"
+    "  },\n"
+    "  \"network\": {\n"
+    "    \"interval\": 1,\n"
+    "    \"format-ethernet\": \"<span color='#89dceb'>󰈁</span> Cable\",\n"
+    "    \"format-wifi\": \"<span color='#06b6d4'>{icon}</span> WiFi\",\n"
+    "    \"format-disconnected\": \"<span color='#eba0ac'>󰈂</span> Disconnected\",\n"
+    "    \"format-icons\": [\"󰤟\", \"󰤢\", \"󰤥\", \"󰤨\"],\n"
+    "    \"tooltip\": false\n"
+    "  },\n"
+    "  \"custom/weather\": {\n"
+    "    \"format\": \"{}°\",\n"
+    "    \"tooltip\": true,\n"
+    "    \"interval\": 3600,\n"
+    "    \"exec\": \"" (file-append wttrbar "/bin/wttrbar") "\",\n"
+    "    \"return-type\": \"json\"\n"
+    "  },\n"
+    "  \"sway/workspaces\": {\n"
+    "    \"disable-scroll\": true,\n"
+    "    \"all-outputs\": true\n"
+    "  }\n"
+    "}]\n"))
+
+(define %waybar-style
+  (plain-file "waybar-style.css"
+    "@import \"mocha.css\";
+
+* {
+    font-family: FontAwesome, 'Fira Code';
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: alpha(@base, 0.1);
+    border-bottom: 2px solid alpha(@sky, 0.5);
+    color: @rosewater;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background-color: alpha(@base, 0.85);
+    color: @text;
+    font-weight: 900;
+    border-radius: 6px;
+}
+
+#workspaces button:hover {
+    background: @mantle;
+}
+
+#workspaces button.focused {
+    background-color: alpha(@crust, 0.85);
+    box-shadow: inset 0 -2px @sky;
+}
+
+#workspaces button.urgent {
+    background-color: alpha(@red, 0.85);
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#mpd,
+#custom-weather {
+    padding: 0 1em;
+    color: @text;
+    font-weight: 900;
+    background-color: alpha(@base, 0.85);
+    border-radius: 9999px;
+}
+
+#clock.week {
+  margin-right: 0px;
+  color: @peach;
+  border-radius: 9999px 0px 0px 9999px;
+}
+
+#clock.year {
+  margin: 0px;
+  padding: 0px;
+  color: @pink;
+  border-radius: 0px;
+}
+
+#clock.time {
+  margin-left: 0px;
+  color: @sky;
+  border-radius: 0px 9999px 9999px 0px;
+}
+
+#battery.charging, #battery.plugged {
+    color: @green;
+}
+
+#battery.discharging {
+    color: @yellow;
+}
+
+#battery.warning:not(.charging) {
+    background-color: alpha(@red, 0.85);
+    color: @crust;
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    color: @crust;
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    0%   { background-color: alpha(@mauve, 0.85); }
+    25%  { background-color: alpha(@red, 0.85); }
+    50%  { background-color: alpha(@maroon, 0.85); }
+    75%  { background-color: alpha(@peach, 0.85); }
+    100% { background-color: alpha(@mauve, 0.85); }
+}
+"))
+
+;; ---------------------------------------------------------------------------
 ;; Desktop home environment
 ;;
 ;; Used by:
@@ -345,7 +523,10 @@
      openssh
      brightnessctl
      playerctl
-     pamixer))
+     pamixer
+
+     ;; Waybar utilities
+     wttrbar))
 
    (services
     (list
@@ -368,4 +549,8 @@
 (require 'org)
 (org-babel-load-file
  (expand-file-name \"emacs.org\" user-emacs-directory))
-"))))))))
+"))
+        ;; Waybar
+        (".config/waybar/config"   ,%waybar-config)
+        (".config/waybar/style.css" ,%waybar-style)
+        (".config/waybar/mocha.css" ,(local-file "mocha.css"))))))))
