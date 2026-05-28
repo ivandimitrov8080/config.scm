@@ -98,7 +98,8 @@
  (gnu system)
  (gnu system image)               ; root-label
  (gnu system keyboard)
- (systems common))                ; %my-keyboard-layout, %primary-user,
+ (gnu packages wm)               ; swayfx
+ (systems common))               ; %my-keyboard-layout, %primary-user,
                                   ; %sway-config, %desktop-home-environment
 
 (use-service-modules base networking desktop dbus)

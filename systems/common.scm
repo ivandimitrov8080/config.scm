@@ -59,7 +59,8 @@
   #:use-module (gnu packages video)          ; mpv
   #:use-module (gnu packages vim)
   #:use-module (gnu packages wm)             ; swayfx, waybar, rofi, mako, etc.
-  #:use-module (gnu packages xdisorg)        ; grim, slurp, wl-clipboard
+  #:use-module (gnu packages image)          ; grim, slurp
+  #:use-module (gnu packages xdisorg)        ; wl-clipboard
 
   ;; Custom channel packages
   #:use-module (config packages emacs)       ; emacs-ivan, %emacs-packages
@@ -103,7 +104,7 @@
 ;; ---------------------------------------------------------------------------
 
 ;; Capture upstream %base-packages before we shadow the name.
-(define %upstream-base-packages %base-packages)
+(define %upstream-base-packages (@ (gnu system) %base-packages))
 
 (define-public %base-packages
   (append
@@ -360,9 +361,6 @@
     (list
      ;; User D-Bus session
      (service home-dbus-service-type)
-
-     ;; Font cache
-     (service home-fontconfig-service-type)
 
      ;; Sway (swayfx)
      (service home-sway-service-type %sway-config)
