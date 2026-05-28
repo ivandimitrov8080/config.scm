@@ -107,8 +107,7 @@
 
 (define-public %base-packages
   (append
-   (list nss-certs
-         curl
+   (list curl
          git
          openssh
          bash
