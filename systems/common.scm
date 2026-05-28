@@ -95,7 +95,6 @@
        "audio"
        "video"
        "input"
-       "seat"
        "netdev"))
     (home-directory "/home/ivand")))
 

@@ -207,10 +207,11 @@ fi
   (services
    (append
     (list
-     ;; --- Seat management ---
-     ;; seatd allows sway to open DRM/input devices without being root.
-     ;; Required for Wayland compositors on a system without elogind.
-     (service seatd-service-type)
+     ;; --- Seat management + session tracking ---
+     ;; elogind creates /run/user/<uid> (XDG_RUNTIME_DIR) on login,
+     ;; manages seats, and is the standard Guix approach for Wayland
+     ;; compositors on non-systemd systems.
+     (service elogind-service-type)
 
      ;; --- D-Bus system bus ---
      ;; Many Wayland components (mako, portals, etc.) need this.
