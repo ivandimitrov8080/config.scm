@@ -35,6 +35,7 @@
   #:use-module (gnu home services fontutils) ; home-fontconfig-service-type
   #:use-module (gnu home services sway)      ; home-sway-service-type
   #:use-module (gnu home services shepherd)  ; home-shepherd-service-type
+  #:use-module (gnu home services sound)     ; home-pipewire-service-type
 
   ;; Packages
   #:use-module (gnu packages base)
@@ -52,7 +53,6 @@
   #:use-module (gnu packages man)
   #:use-module (gnu packages music)          ; playerctl
   #:use-module (gnu packages password-utils)
-  #:use-module (gnu packages pulseaudio)     ; pamixer
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages terminals)      ; kitty
   #:use-module (gnu packages version-control)
@@ -523,15 +523,18 @@ window#waybar {
      openssh
      brightnessctl
      playerctl
-     pamixer
 
      ;; Waybar utilities
-     wttrbar))
+     wttrbar
+     wireplumber))
 
    (services
     (list
      ;; User D-Bus session
      (service home-dbus-service-type)
+
+     ;; PipeWire + WirePlumber (audio — required for wireplumber waybar module)
+     (service home-pipewire-service-type)
 
      ;; Sway (swayfx)
      (service home-sway-service-type %sway-config)

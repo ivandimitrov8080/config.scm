@@ -102,7 +102,7 @@
  (systems common))               ; %my-keyboard-layout, %primary-user,
                                   ; %sway-config, %desktop-home-environment
 
-(use-service-modules base networking desktop dbus)
+(use-service-modules base networking desktop dbus pm)
 
 ;; ============================================================================
 ;; VM-specific home environment
@@ -216,6 +216,9 @@ fi
      ;; --- D-Bus system bus ---
      ;; Many Wayland components (mako, portals, etc.) need this.
      (service dbus-root-service-type)
+
+     ;; --- Power management (battery widget in waybar) ---
+     (service upower-service-type)
 
      ;; --- Networking ---
      (service dhcpcd-service-type)
