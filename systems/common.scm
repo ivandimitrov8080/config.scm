@@ -242,9 +242,13 @@
           playerctl))
 
    (variables
-    `((mod  . "Mod4")
-      (term . "kitty")
-      (menu . "rofi -show drun")))
+    `((mod   . "Mod4")
+      (left  . "h")
+      (down  . "j")
+      (up    . "k")
+      (right . "l")
+      (term  . "kitty")
+      (menu  . "rofi -show drun")))
 
    (inputs
     (list
