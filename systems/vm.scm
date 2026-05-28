@@ -124,7 +124,6 @@
                 (list (plain-file "sway-autostart"
                         "# Auto-start sway on tty1
 if [ \"$(tty)\" = \"/dev/tty1\" ] && [ -z \"$WAYLAND_DISPLAY\" ]; then
-  exec sway
 fi
 ")))))
      (home-environment-user-services %desktop-home-environment)))))

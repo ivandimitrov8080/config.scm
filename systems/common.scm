@@ -271,7 +271,6 @@
     (list
      "waybar"
      "mako"
-     "swayidle -w timeout 300 'swaylock -c 000000' timeout 600 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"'"
      "swaymsg 'workspace 2; exec icecat'"
      "swaymsg 'workspace 1; exec kitty'"))
 
