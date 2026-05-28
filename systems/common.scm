@@ -41,6 +41,8 @@
   ;; Packages
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages admin)         ; htop, tree, nmap, netcat
+  #:use-module (gnu packages compression)   ; zip, unzip
   #:use-module (gnu packages nss)            ; nss-certs
   #:use-module (gnu packages curl)
   #:use-module (gnu packages emacs)          ; emacs-pgtk (fallback base)
@@ -50,15 +52,23 @@
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages gnuzilla)       ; icecat
   #:use-module (gnu packages image-viewers)  ; imv
-  #:use-module (gnu packages linux)          ; brightnessctl
+  #:use-module (gnu packages linux)          ; brightnessctl, strace
+  #:use-module (gnu packages lsof)           ; lsof
   #:use-module (gnu packages man)
   #:use-module (gnu packages music)          ; playerctl
+  #:use-module (gnu packages ncdu)           ; ncdu
   #:use-module (gnu packages password-utils)
+  #:use-module (gnu packages rsync)          ; rsync
+  #:use-module (gnu packages rust-apps)      ; ripgrep
   #:use-module (gnu packages ssh)
+  #:use-module (gnu packages busybox)
   #:use-module (gnu packages terminals)      ; kitty
+  #:use-module (gnu packages tmux)           ; tmux
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages video)          ; mpv
   #:use-module (gnu packages vim)
+  #:use-module (gnu packages web)            ; jq
+  #:use-module (gnu packages wget)           ; wget
   #:use-module (gnu packages wm)             ; swayfx, waybar, rofi, mako, etc.
   #:use-module (gnu packages image)          ; grim, slurp
   #:use-module (gnu packages xdisorg)        ; wl-clipboard
@@ -113,18 +123,70 @@
 
 (define-public %base-packages
   (append
-   (list curl
-         git
-         openssh
-         bash
-         bash-completion
-         vim
-         file
-         font-dejavu
-         font-liberation
-         man-pages
-         password-store
-         brightnessctl)
+   (list
+    busybox
+
+    ;; Network / download
+    curl
+    wget
+
+    ;; Version control
+    git
+
+    ;; Remote access
+    openssh
+
+    ;; Shell
+    bash
+    bash-completion
+
+    ;; Editors
+    vim
+
+    ;; File inspection
+    file
+    tree
+    which
+    diffutils
+
+    ;; Archives
+    zip
+    unzip
+
+    ;; Process / system inspection
+    htop
+    lsof
+    strace
+
+    ;; Networking tools
+    nmap
+    netcat
+
+    ;; Text processing
+    ripgrep
+    jq
+
+    ;; File transfer / sync
+    rsync
+
+    ;; Disk usage
+    ncdu
+
+    ;; Terminal multiplexer
+    tmux
+
+    ;; Fonts
+    font-dejavu
+    font-liberation
+
+    ;; Docs
+    man-pages
+
+    ;; Security
+    password-store
+
+    ;; Hardware
+    brightnessctl)
    %upstream-base-packages))
 
 ;; ---------------------------------------------------------------------------
@@ -291,7 +353,6 @@
 
    (startup-programs
     (list
-     "waybar"
      "mako"
      "swaymsg 'workspace 2; exec icecat'"
      "swaymsg 'workspace 1; exec kitty'"))
