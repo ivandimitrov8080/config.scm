@@ -93,14 +93,15 @@
  (gnu services base)
  (gnu services dbus)              ; dbus-root-service-type
  (gnu services desktop)           ; seatd-service-type
- (gnu services guix)              ; guix-home-service-type
+ (gnu services guix)              ; guix-home-service-type (also re-exported by systems common)
  (gnu services networking)        ; dhcpcd-service-type
  (gnu system)
  (gnu system image)               ; root-label
  (gnu system keyboard)
  (gnu packages wm)               ; swayfx
- (systems common))               ; %my-keyboard-layout, %primary-user,
-                                  ; %sway-config, %desktop-home-environment
+  (systems common))               ; %my-keyboard-layout, %primary-user,
+                                   ; %sway-config, %desktop-home-environment,
+                                   ; %guix-service, guix-home-service-for
 
 (use-service-modules base networking desktop dbus pm)
 
@@ -223,10 +224,8 @@ fi
      (service dhcpcd-service-type)
 
      ;; --- Desktop home environment for ivand ---
-     ;; guix-home-service-type activates the home-environment at boot via a
-     ;; one-shot shepherd service.  The value is a list of (user he) pairs.
-     (service guix-home-service-type
-              (list (list "ivand" %vm-home-environment))))
+     ;; Activates %vm-home-environment at boot via a one-shot shepherd service.
+     (guix-home-service-for "ivand" %vm-home-environment))
 
     ;; Upstream base services: udev, logging, mingetty on ttys, etc.
     ;; This is (gnu)'s %base-services, NOT the one from (systems common).

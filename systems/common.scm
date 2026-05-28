@@ -27,6 +27,7 @@
   #:use-module (gnu services networking)
   #:use-module (gnu services ssh)
   #:use-module (gnu services desktop)    ; seatd-service-type
+  #:use-module (gnu services guix)       ; guix-service-type, guix-home-service-type
 
   ;; Home
   #:use-module (gnu home)
@@ -74,7 +75,9 @@
             %sway-config
             %waybar-config
             %waybar-style
-            %desktop-home-environment))
+            %desktop-home-environment
+            %guix-service
+            guix-home-service-for))
 
 ;; ---------------------------------------------------------------------------
 ;; Keyboard layout
@@ -134,6 +137,25 @@
   (list
    (service network-manager-service-type)
    (service wpa-supplicant-service-type)))
+
+;; ---------------------------------------------------------------------------
+;; Guix daemon and home wiring
+;; ---------------------------------------------------------------------------
+
+;; The Guix package-manager daemon.  Every proper operating-system should
+;; include this (it is also present in the upstream %base-services, but
+;; making it explicit here lets other modules reference it directly).
+(define-public %guix-service
+  (service guix-service-type))
+
+;; Return a guix-home-service-type service that activates HOME-ENV for USER
+;; at boot.  Typically used in an operating-system's services list.
+;;
+;; Example:
+;;   (guix-home-service-for "ivand" %vm-home-environment)
+(define-public (guix-home-service-for user home-env)
+  (service guix-home-service-type
+           (list (list user home-env))))
 
 ;; ---------------------------------------------------------------------------
 ;; Sway keybindings
