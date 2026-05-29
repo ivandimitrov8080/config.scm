@@ -247,7 +247,7 @@ so the daemon starts automatically with the user session.")))
     (Shift+XF86AudioRaiseVolume . "exec pactl set-source-volume @DEFAULT_SOURCE@ +5%")
     (XF86MonBrightnessUp . "exec brightnessctl set 10%+")
     (XF86MonBrightnessDown . "exec brightnessctl set 10%-")
-    (alt+shift+l . "exec swaylock -c 000000")
+    (alt+shift+l . "exec swaylock")
     ($mod+Shift+s . "exec grim -g \"$(slurp)\" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png")
     ($mod+Shift+a . "exec grim -g \"$(slurp)\" - | wl-copy")
     ($mod+Shift+w . "exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png")
@@ -284,9 +284,7 @@ so the daemon starts automatically with the user session.")))
 
                       (keybindings %sway-keybindings)
 
-                      (startup-programs (list "mako"
-                                         "swaymsg 'workspace 2; exec icecat'"
-                                         "swaymsg 'workspace 1; exec kitty'"))
+                      (startup-programs (list "mako" "exec kitty'"))
 
                       (startup+reload-programs (list "kanshi"))
 
@@ -354,4 +352,7 @@ so the daemon starts automatically with the user session.")))
                       ;; Waybar
                       (".config/waybar/config" ,%waybar-config)
                       (".config/waybar/style.css" ,%waybar-style)
-                      (".config/waybar/mocha.css" ,(local-file "mocha.css"))))))))
+                      (".config/waybar/mocha.css" ,(local-file "mocha.css"))
+                      ("Pictures/bg/wallpaper.jpeg" ,(local-file
+                                                      "../wallpaper.jpeg"))))))))
+
