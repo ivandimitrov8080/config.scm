@@ -284,7 +284,7 @@ so the daemon starts automatically with the user session.")))
 
                       (keybindings %sway-keybindings)
 
-                      (startup-programs (list "mako" "exec kitty'"))
+                      (startup-programs (list "exec kitty"))
 
                       (startup+reload-programs (list "kanshi"))
 
