@@ -20,8 +20,8 @@
   ;; Guix core
   #:use-module (guix gexp)
   #:use-module (guix packages)
-  #:use-module (guix records)            ; define-record-type*
-
+  #:use-module (guix records) ;define-record-type*
+  
   ;; GNU system
   #:use-module (gnu)
   #:use-module (gnu system)
@@ -31,76 +31,75 @@
   #:use-module (gnu services)
   #:use-module (gnu services networking)
   #:use-module (gnu services ssh)
-  #:use-module (gnu services desktop)    ; seatd-service-type
-  #:use-module (gnu services guix)       ; guix-service-type, guix-home-service-type
-
+  #:use-module (gnu services desktop) ;seatd-service-type
+  #:use-module (gnu services guix) ;guix-service-type, guix-home-service-type
+  
   ;; Home
   #:use-module (gnu home)
   #:use-module (gnu home services)
-  #:use-module (gnu home services desktop)   ; home-dbus-service-type
-  #:use-module (gnu home services fontutils) ; home-fontconfig-service-type
-  #:use-module (gnu home services sway)      ; home-sway-service-type
-  #:use-module (gnu home services shepherd)  ; home-shepherd-service-type
-  #:use-module (gnu home services sound)     ; home-pipewire-service-type
-  #:use-module (gnu home services xdg)       ; home-xdg-configuration-files-service-type
-
+  #:use-module (gnu home services desktop) ;home-dbus-service-type
+  #:use-module (gnu home services fontutils) ;home-fontconfig-service-type
+  #:use-module (gnu home services sway) ;home-sway-service-type
+  #:use-module (gnu home services shepherd) ;home-shepherd-service-type
+  #:use-module (gnu home services sound) ;home-pipewire-service-type
+  #:use-module (gnu home services xdg) ;home-xdg-configuration-files-service-type
+  
   ;; Packages
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
-  #:use-module (gnu packages admin)         ; htop, tree, nmap, netcat
-  #:use-module (gnu packages compression)   ; zip, unzip
-  #:use-module (gnu packages nss)            ; nss-certs
+  #:use-module (gnu packages admin) ;htop, tree, nmap, netcat
+  #:use-module (gnu packages compression) ;zip, unzip
+  #:use-module (gnu packages nss) ;nss-certs
   #:use-module (gnu packages curl)
-  #:use-module (gnu packages emacs)          ; emacs-pgtk (fallback base)
+  #:use-module (gnu packages emacs) ;emacs-pgtk (fallback base)
   #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages file)
   #:use-module (gnu packages fonts)
   #:use-module (gnu packages fontutils)
-  #:use-module (gnu packages gnuzilla)       ; icecat
-  #:use-module (gnu packages image-viewers)  ; imv
-  #:use-module (gnu packages linux)          ; brightnessctl, strace
-  #:use-module (gnu packages lsof)           ; lsof
+  #:use-module (gnu packages gnuzilla) ;icecat
+  #:use-module (gnu packages image-viewers) ;imv
+  #:use-module (gnu packages linux) ;brightnessctl, strace
+  #:use-module (gnu packages lsof) ;lsof
   #:use-module (gnu packages man)
-  #:use-module (gnu packages music)          ; playerctl
-  #:use-module (gnu packages ncdu)           ; ncdu
+  #:use-module (gnu packages music) ;playerctl
+  #:use-module (gnu packages ncdu) ;ncdu
   #:use-module (gnu packages password-utils)
-  #:use-module (gnu packages rsync)          ; rsync
-  #:use-module (gnu packages rust-apps)      ; ripgrep
+  #:use-module (gnu packages rsync) ;rsync
+  #:use-module (gnu packages rust-apps) ;ripgrep
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages busybox)
-  #:use-module (gnu packages terminals)      ; kitty
-  #:use-module (gnu packages tmux)           ; tmux
+  #:use-module (gnu packages terminals) ;kitty
+  #:use-module (gnu packages tmux) ;tmux
   #:use-module (gnu packages version-control)
-  #:use-module (gnu packages video)          ; mpv
+  #:use-module (gnu packages video) ;mpv
   #:use-module (gnu packages vim)
-  #:use-module (gnu packages web)            ; jq
-  #:use-module (gnu packages wget)           ; wget
-  #:use-module (gnu packages wm)             ; swayfx, waybar, rofi, mako, etc.
-  #:use-module (gnu packages image)          ; grim, slurp
-  #:use-module (gnu packages xdisorg)        ; wl-clipboard
-
+  #:use-module (gnu packages web) ;jq
+  #:use-module (gnu packages wget) ;wget
+  #:use-module (gnu packages wm) ;swayfx, waybar, rofi, mako, etc.
+  #:use-module (gnu packages image) ;grim, slurp
+  #:use-module (gnu packages xdisorg) ;wl-clipboard
+  
   ;; Custom channel packages
-  #:use-module (config packages emacs)       ; emacs-ivan, %emacs-packages
-  #:use-module (config packages wttrbar)     ; wttrbar
-  #:use-module (config packages wpaperd)     ; wpaperd
-
-  #:export (%my-keyboard-layout
-            %primary-user
-            %base-packages
-            %my-base-services
-            %sway-keybindings
-            %sway-config
-            %waybar-config
-            %waybar-style
-            %desktop-home-environment
-            %guix-service
-            guix-home-service-for
-            home-wpaperd-configuration
-            home-wpaperd-configuration?
-            home-wpaperd-configuration-wpaperd
-            home-wpaperd-configuration-path
-            home-wpaperd-configuration-duration
-            home-wpaperd-service-type))
+  #:use-module (config packages emacs) ;emacs-ivan, %emacs-packages
+  #:use-module (config packages wttrbar) ;wttrbar
+  #:use-module (config packages wpaperd) ;wpaperd
+  
+  #:export (%my-keyboard-layout %primary-user
+                                %base-packages
+                                %my-base-services
+                                %sway-keybindings
+                                %sway-config
+                                %waybar-config
+                                %waybar-style
+                                %desktop-home-environment
+                                %guix-service
+                                guix-home-service-for
+                                home-wpaperd-configuration
+                                home-wpaperd-configuration?
+                                home-wpaperd-configuration-wpaperd
+                                home-wpaperd-configuration-path
+                                home-wpaperd-configuration-duration
+                                home-wpaperd-service-type))
 
 ;; ---------------------------------------------------------------------------
 ;; Keyboard layout
@@ -119,12 +118,7 @@
     (name "ivand")
     (comment "Ivan")
     (group "users")
-    (supplementary-groups
-     '("wheel"
-       "audio"
-       "video"
-       "input"
-       "netdev"))
+    (supplementary-groups '("wheel" "audio" "video" "input" "netdev"))
     (home-directory "/home/ivand")))
 
 ;; ---------------------------------------------------------------------------
@@ -132,75 +126,73 @@
 ;; ---------------------------------------------------------------------------
 
 ;; Capture upstream %base-packages before we shadow the name.
-(define %upstream-base-packages (@ (gnu system) %base-packages))
+(define %upstream-base-packages
+  (@ (gnu system) %base-packages))
 
 (define-public %base-packages
-  (append
-   (list
-    busybox
+  (append (list busybox
 
-    ;; Network / download
-    curl
-    wget
+                ;; Network / download
+                curl
+                wget
 
-    ;; Version control
-    git
+                ;; Version control
+                git
 
-    ;; Remote access
-    openssh
+                ;; Remote access
+                openssh
 
-    ;; Shell
-    bash
-    bash-completion
+                ;; Shell
+                bash
+                bash-completion
 
-    ;; Editors
-    vim
+                ;; Editors
+                vim
 
-    ;; File inspection
-    file
-    tree
-    which
-    diffutils
+                ;; File inspection
+                file
+                tree
+                which
+                diffutils
 
-    ;; Archives
-    zip
-    unzip
+                ;; Archives
+                zip
+                unzip
 
-    ;; Process / system inspection
-    htop
-    lsof
-    strace
+                ;; Process / system inspection
+                htop
+                lsof
+                strace
 
-    ;; Networking tools
-    nmap
-    netcat
+                ;; Networking tools
+                nmap
+                netcat
 
-    ;; Text processing
-    ripgrep
-    jq
+                ;; Text processing
+                ripgrep
+                jq
 
-    ;; File transfer / sync
-    rsync
+                ;; File transfer / sync
+                rsync
 
-    ;; Disk usage
-    ncdu
+                ;; Disk usage
+                ncdu
 
-    ;; Terminal multiplexer
-    tmux
+                ;; Terminal multiplexer
+                tmux
 
-    ;; Fonts
-    font-dejavu
-    font-liberation
+                ;; Fonts
+                font-dejavu
+                font-liberation
 
-    ;; Docs
-    man-pages
+                ;; Docs
+                man-pages
 
-    ;; Security
-    password-store
+                ;; Security
+                password-store
 
-    ;; Hardware
-    brightnessctl)
-   %upstream-base-packages))
+                ;; Hardware
+                brightnessctl) %upstream-base-packages))
 
 ;; ---------------------------------------------------------------------------
 ;; Base services — every machine
@@ -209,9 +201,8 @@
 (define-public %my-base-services
   ;; Services for real machines.  The VM uses the upstream %base-services
   ;; directly to avoid conflicts with dhcpcd.
-  (list
-   (service network-manager-service-type)
-   (service wpa-supplicant-service-type)))
+  (list (service network-manager-service-type)
+        (service wpa-supplicant-service-type)))
 
 ;; ---------------------------------------------------------------------------
 ;; Guix daemon and home wiring
@@ -254,16 +245,16 @@
 ;; wpaperd expands ~ at startup, so the path works regardless of $HOME.
 ;; ---------------------------------------------------------------------------
 
-(define-record-type* <home-wpaperd-configuration>
-  home-wpaperd-configuration make-home-wpaperd-configuration
+(define-record-type* <home-wpaperd-configuration> home-wpaperd-configuration
+                     make-home-wpaperd-configuration
   home-wpaperd-configuration?
   ;; The wpaperd package (daemon + wpaperctl CLI).
-  (wpaperd  home-wpaperd-configuration-wpaperd
-            (default wpaperd))
+  (wpaperd home-wpaperd-configuration-wpaperd
+           (default wpaperd))
   ;; Wallpaper directory for the "default" monitor section.
   ;; Supports ~ (tilde expansion performed by wpaperd at runtime).
-  (path     home-wpaperd-configuration-path
-            (default "~/Pictures/bg"))
+  (path home-wpaperd-configuration-path
+        (default "~/Pictures/bg"))
   ;; How long each wallpaper is displayed before rotating.
   ;; Uses humantime format: "30s", "10m", "2h", etc.
   (duration home-wpaperd-configuration-duration
@@ -272,10 +263,13 @@
 (define (home-wpaperd-config-file config)
   "Serialize HOME-WPAPERD-CONFIGURATION to a wallpaper.toml file-like object."
   (plain-file "wallpaper.toml"
-    (string-append
-     "[default]\n"
-     "path = \"" (home-wpaperd-configuration-path config) "\"\n"
-     "duration = \"" (home-wpaperd-configuration-duration config) "\"\n")))
+              (string-append "[default]\n"
+                             "path = \""
+                             (home-wpaperd-configuration-path config)
+                             "\"\n"
+                             "duration = \""
+                             (home-wpaperd-configuration-duration config)
+                             "\"\n")))
 
 (define (home-wpaperd-xdg-config-files config)
   "Return the XDG config file alist for wpaperd."
@@ -283,40 +277,38 @@
 
 (define (home-wpaperd-shepherd-service config)
   "Return a shepherd service that starts the wpaperd daemon."
-  (list
-   (shepherd-service
-    (provision '(wpaperd))
-    (documentation "wpaperd wallpaper daemon for Wayland.")
-    ;; No hard requirement on sway: shepherd launches it and sway connects
-    ;; to the already-running daemon via the wlr-layer-shell protocol.
-    (start #~(make-forkexec-constructor
-              (list #$(file-append
-                       (home-wpaperd-configuration-wpaperd config)
-                       "/bin/wpaperd"))))
-    (stop #~(make-kill-destructor))
-    (respawn? #t))))
+  (list (shepherd-service (provision '(wpaperd))
+                          (documentation
+                           "wpaperd wallpaper daemon for Wayland.")
+                          ;; No hard requirement on sway: shepherd launches it and sway connects
+                          ;; to the already-running daemon via the wlr-layer-shell protocol.
+                          (start #~(make-forkexec-constructor (list #$(file-append
+                                                                       (home-wpaperd-configuration-wpaperd
+                                                                        config)
+                                                                       "/bin/wpaperd"))))
+                          (stop #~(make-kill-destructor))
+                          (respawn? #t))))
 
 (define (home-wpaperd-profile-service config)
   "Install wpaperd into the home profile so wpaperctl is on PATH."
   (list (home-wpaperd-configuration-wpaperd config)))
 
 (define-public home-wpaperd-service-type
-  (service-type
-   (name 'home-wpaperd)
-   (extensions
-    (list
-     ;; Register the shepherd daemon.
-     (service-extension home-shepherd-service-type
-                        home-wpaperd-shepherd-service)
-     ;; Write ~/.config/wpaperd/wallpaper.toml.
-     (service-extension home-xdg-configuration-files-service-type
-                        home-wpaperd-xdg-config-files)
-     ;; Add wpaperd to the home profile (makes wpaperctl available on PATH).
-     (service-extension home-profile-service-type
-                        home-wpaperd-profile-service)))
-   (default-value (home-wpaperd-configuration))
-   (description
-    "Run @command{wpaperd}, a wallpaper daemon for Wayland compositors
+  (service-type (name 'home-wpaperd)
+                (extensions (list
+                             ;; Register the shepherd daemon.
+                             (service-extension home-shepherd-service-type
+                                                home-wpaperd-shepherd-service)
+                             ;; Write ~/.config/wpaperd/wallpaper.toml.
+                             (service-extension
+                              home-xdg-configuration-files-service-type
+                              home-wpaperd-xdg-config-files)
+                             ;; Add wpaperd to the home profile (makes wpaperctl available on PATH).
+                             (service-extension home-profile-service-type
+                                                home-wpaperd-profile-service)))
+                (default-value (home-wpaperd-configuration))
+                (description
+                 "Run @command{wpaperd}, a wallpaper daemon for Wayland compositors
 implementing the wlr-layer-shell protocol.  Writes
 @file{~/.config/wpaperd/wallpaper.toml} and registers a Shepherd service
 so the daemon starts automatically with the user session.")))
@@ -326,77 +318,77 @@ so the daemon starts automatically with the user session.")))
 ;; ---------------------------------------------------------------------------
 
 (define-public %sway-keybindings
-  `(;; --- Launchers ---
-    ($mod+p           . "exec rofi -show drun")
-    ($mod+Return      . "exec kitty")
-    (end              . "exec rofi -show calc")
+  `( ;--- Launchers ---
+     ($mod+p . "exec rofi -show drun")
+    ($mod+Return . "exec kitty")
+    (end . "exec rofi -show calc")
 
     ;; --- Window management ---
-    ($mod+Shift+q     . "kill")
-    ($mod+Shift+c     . "reload")
-    ($mod+f           . "fullscreen toggle")
+    ($mod+Shift+q . "kill")
+    ($mod+Shift+c . "reload")
+    ($mod+f . "fullscreen toggle")
     ($mod+Shift+space . "floating toggle")
-    ($mod+space       . "focus mode_toggle")
+    ($mod+space . "focus mode_toggle")
 
     ;; --- Focus movement (vim-style) ---
-    ($mod+h           . "focus left")
-    ($mod+j           . "focus down")
-    ($mod+k           . "focus up")
-    ($mod+l           . "focus right")
-    ($mod+Left        . "focus left")
-    ($mod+Down        . "focus down")
-    ($mod+Up          . "focus up")
-    ($mod+Right       . "focus right")
+    ($mod+h . "focus left")
+    ($mod+j . "focus down")
+    ($mod+k . "focus up")
+    ($mod+l . "focus right")
+    ($mod+Left . "focus left")
+    ($mod+Down . "focus down")
+    ($mod+Up . "focus up")
+    ($mod+Right . "focus right")
 
     ;; --- Move windows ---
-    ($mod+Shift+h     . "move left")
-    ($mod+Shift+j     . "move down")
-    ($mod+Shift+k     . "move up")
-    ($mod+Shift+l     . "move right")
+    ($mod+Shift+h . "move left")
+    ($mod+Shift+j . "move down")
+    ($mod+Shift+k . "move up")
+    ($mod+Shift+l . "move right")
 
     ;; --- Workspaces 1-10 ---
-    ($mod+1           . "workspace number 1")
-    ($mod+2           . "workspace number 2")
-    ($mod+3           . "workspace number 3")
-    ($mod+4           . "workspace number 4")
-    ($mod+5           . "workspace number 5")
-    ($mod+6           . "workspace number 6")
-    ($mod+7           . "workspace number 7")
-    ($mod+8           . "workspace number 8")
-    ($mod+9           . "workspace number 9")
-    ($mod+0           . "workspace number 10")
-    ($mod+Shift+1     . "move container to workspace number 1")
-    ($mod+Shift+2     . "move container to workspace number 2")
-    ($mod+Shift+3     . "move container to workspace number 3")
-    ($mod+Shift+4     . "move container to workspace number 4")
-    ($mod+Shift+5     . "move container to workspace number 5")
-    ($mod+Shift+6     . "move container to workspace number 6")
-    ($mod+Shift+7     . "move container to workspace number 7")
-    ($mod+Shift+8     . "move container to workspace number 8")
-    ($mod+Shift+9     . "move container to workspace number 9")
-    ($mod+Shift+0     . "move container to workspace number 10")
+    ($mod+1 . "workspace number 1")
+    ($mod+2 . "workspace number 2")
+    ($mod+3 . "workspace number 3")
+    ($mod+4 . "workspace number 4")
+    ($mod+5 . "workspace number 5")
+    ($mod+6 . "workspace number 6")
+    ($mod+7 . "workspace number 7")
+    ($mod+8 . "workspace number 8")
+    ($mod+9 . "workspace number 9")
+    ($mod+0 . "workspace number 10")
+    ($mod+Shift+1 . "move container to workspace number 1")
+    ($mod+Shift+2 . "move container to workspace number 2")
+    ($mod+Shift+3 . "move container to workspace number 3")
+    ($mod+Shift+4 . "move container to workspace number 4")
+    ($mod+Shift+5 . "move container to workspace number 5")
+    ($mod+Shift+6 . "move container to workspace number 6")
+    ($mod+Shift+7 . "move container to workspace number 7")
+    ($mod+Shift+8 . "move container to workspace number 8")
+    ($mod+Shift+9 . "move container to workspace number 9")
+    ($mod+Shift+0 . "move container to workspace number 10")
 
     ;; --- Layout ---
-    ($mod+b           . "splith")
-    ($mod+v           . "splitv")
-    ($mod+s           . "layout stacking")
-    ($mod+w           . "layout tabbed")
-    ($mod+e           . "layout toggle split")
+    ($mod+b . "splith")
+    ($mod+v . "splitv")
+    ($mod+s . "layout stacking")
+    ($mod+w . "layout tabbed")
+    ($mod+e . "layout toggle split")
 
     ;; --- Scratchpad ---
     ($mod+Shift+minus . "move scratchpad")
-    ($mod+minus       . "scratchpad show")
+    ($mod+minus . "scratchpad show")
 
     ;; --- Audio ---
-    (XF86AudioMute              . "exec pactl set-sink-mute @DEFAULT_SINK@ toggle")
-    (Shift+XF86AudioMute        . "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle")
-    (XF86AudioLowerVolume       . "exec pactl set-sink-volume @DEFAULT_SINK@ -5%")
+    (XF86AudioMute . "exec pactl set-sink-mute @DEFAULT_SINK@ toggle")
+    (Shift+XF86AudioMute . "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle")
+    (XF86AudioLowerVolume . "exec pactl set-sink-volume @DEFAULT_SINK@ -5%")
     (Shift+XF86AudioLowerVolume . "exec pactl set-source-volume @DEFAULT_SOURCE@ -5%")
-    (XF86AudioRaiseVolume       . "exec pactl set-sink-volume @DEFAULT_SINK@ +5%")
+    (XF86AudioRaiseVolume . "exec pactl set-sink-volume @DEFAULT_SINK@ +5%")
     (Shift+XF86AudioRaiseVolume . "exec pactl set-source-volume @DEFAULT_SOURCE@ +5%")
 
     ;; --- Brightness ---
-    (XF86MonBrightnessUp   . "exec brightnessctl set 10%+")
+    (XF86MonBrightnessUp . "exec brightnessctl set 10%+")
     (XF86MonBrightnessDown . "exec brightnessctl set 10%-")
 
     ;; --- Lock ---
@@ -415,71 +407,58 @@ so the daemon starts automatically with the user session.")))
 ;; ---------------------------------------------------------------------------
 
 (define-public %sway-config
-  (sway-configuration
-   (packages
-    (list swayfx
-          swaylock
-          swayidle
-          waybar
-          rofi
-          mako
-          kanshi
-          grim
-          slurp
-          wl-clipboard
-          brightnessctl
-          playerctl))
+  (sway-configuration (packages (list swayfx
+                                      swaylock
+                                      swayidle
+                                      waybar
+                                      rofi
+                                      mako
+                                      kanshi
+                                      grim
+                                      slurp
+                                      wl-clipboard
+                                      brightnessctl
+                                      playerctl))
 
-   (variables
-    `((mod   . "Mod4")
-      (left  . "h")
-      (down  . "j")
-      (up    . "k")
-      (right . "l")
-      (term  . "kitty")
-      (menu  . "rofi -show drun")))
+                      (variables `((mod . "Mod4") (left . "h")
+                                   (down . "j")
+                                   (up . "k")
+                                   (right . "l")
+                                   (term . "kitty")
+                                   (menu . "rofi -show drun")))
 
-   (inputs
-    (list
-     (sway-input
-      (identifier "*")
-      (layout %my-keyboard-layout))
-     (sway-input
-      (identifier "type:touchpad")
-      (tap #t)
-      (disable-while-typing #t)
-      (extra-content '("scroll_method two_finger"
-                       "natural_scroll enabled")))))
+                      (inputs (list (sway-input (identifier "*")
+                                                (layout %my-keyboard-layout))
+                                    (sway-input (identifier "type:touchpad")
+                                                (tap #t)
+                                                (disable-while-typing #t)
+                                                (extra-content '("scroll_method two_finger"
+                                                                 "natural_scroll enabled")))))
 
-   (keybindings %sway-keybindings)
+                      (keybindings %sway-keybindings)
 
-   (startup-programs
-    (list
-     "mako"
-     "swaymsg 'workspace 2; exec icecat'"
-     "swaymsg 'workspace 1; exec kitty'"))
+                      (startup-programs (list "mako"
+                                         "swaymsg 'workspace 2; exec icecat'"
+                                         "swaymsg 'workspace 1; exec kitty'"))
 
-   (startup+reload-programs
-    (list "kanshi"))
+                      (startup+reload-programs (list "kanshi"))
 
-   (extra-content
-    '("assign [app_id=\"^icecat$\"] workspace 2"
-      ;; Gaps
-      "gaps horizontal 2"
-      "gaps vertical 2"
-      ;; Borders
-      "default_border none"
-      "default_floating_border none"
-      "titlebar_border_thickness 0"
-      ;; SwayFX
-      "blur enable"
-      "shadows enable"
-      "corner_radius 15"
-      "default_dim_inactive 0.2"
-      ;; Behaviour
-      "focus_follows_mouse no"
-      "mouse_warping none"
-      ))))
+                      (extra-content '("assign [app_id=\"^icecat$\"] workspace 2"
+                                       ;; Gaps
+                                       "gaps horizontal 2"
+                                       "gaps vertical 2"
+                                       ;; Borders
+                                       "default_border none"
+                                       "default_floating_border none"
+                                       "titlebar_border_thickness 0"
+                                       ;; SwayFX
+                                       "blur enable"
+                                       "shadows enable"
+                                       "corner_radius 15"
+                                       "default_dim_inactive 0.2"
+                                       ;; Behaviour
+                                       "focus_follows_mouse no"
+                                       "mouse_warping none"))))
 
 ;; ---------------------------------------------------------------------------
 ;; Waybar
@@ -489,64 +468,83 @@ so the daemon starts automatically with the user session.")))
 ;; spliced in at build time without needing a computed-file gexp.
 (define %waybar-config
   (mixed-text-file "waybar-config"
-    "[{\n"
-    "  \"layer\": \"top\",\n"
-    "  \"position\": \"top\",\n"
-    "  \"height\": 30,\n"
-    "  \"output\": [\"eDP-1\", \"HDMI-A-1\", \"*\"],\n"
-    "  \"modules-left\": [\"sway/workspaces\", \"sway/mode\"],\n"
-    "  \"modules-center\": [\"clock#week\", \"clock#year\", \"clock#time\"],\n"
-    "  \"modules-right\": [\"custom/weather\", \"network\", \"wireplumber#sink\", \"wireplumber#source\", \"battery\"],\n"
-    "  \"clock#time\": {\"interval\": 1, \"format\": \"{:%H:%M:%S}\", \"tooltip\": false},\n"
-    "  \"clock#week\": {\"format\": \"{:%a}\", \"tooltip\": false},\n"
-    "  \"clock#year\": {\"format\": \"{:%Y-%m-%d}\", \"tooltip\": false},\n"
-    "  \"battery\": {\n"
-    "    \"interval\": 1,\n"
-    "    \"format\": \"{icon} {capacity}% {time}\",\n"
-    "    \"format-time\": \" {H} h {M} m\",\n"
-    "    \"format-icons\": [\"\", \"\", \"\", \"\", \"\"],\n"
-    "    \"states\": {\"warning\": 30, \"critical\": 15},\n"
-    "    \"tooltip\": false\n"
-    "  },\n"
-    "  \"wireplumber#sink\": {\n"
-    "    \"node-type\": \"Audio/Sink\",\n"
-    "    \"format\": \"{volume}% <span color='#a6e3a1'>{icon}</span>\",\n"
-    "    \"format-muted\": \"{volume}% <span color='#f38ba8'>󰝟</span>\",\n"
-    "    \"format-icons\": [\"\", \"\", \"\"],\n"
-    "    \"max-volume\": 200,\n"
-    "    \"scroll-step\": 0.2\n"
-    "  },\n"
-    "  \"wireplumber#source\": {\n"
-    "    \"node-type\": \"Audio/Source\",\n"
-    "    \"format\": \"{volume}% <span color='#a6e3a1'></span>\",\n"
-    "    \"format-muted\": \"{volume}% <span color='#f38ba8'></span>\",\n"
-    "    \"max-volume\": 200,\n"
-    "    \"scroll-step\": 0.2\n"
-    "  },\n"
-    "  \"network\": {\n"
-    "    \"interval\": 1,\n"
-    "    \"format-ethernet\": \"<span color='#89dceb'>󰈁</span> Cable\",\n"
-    "    \"format-wifi\": \"<span color='#06b6d4'>{icon}</span> WiFi\",\n"
-    "    \"format-disconnected\": \"<span color='#eba0ac'>󰈂</span> Disconnected\",\n"
-    "    \"format-icons\": [\"󰤟\", \"󰤢\", \"󰤥\", \"󰤨\"],\n"
-    "    \"tooltip\": false\n"
-    "  },\n"
-    "  \"custom/weather\": {\n"
-    "    \"format\": \"{}°\",\n"
-    "    \"tooltip\": true,\n"
-    "    \"interval\": 3600,\n"
-    "    \"exec\": \"" (file-append wttrbar "/bin/wttrbar") "\",\n"
-    "    \"return-type\": \"json\"\n"
-    "  },\n"
-    "  \"sway/workspaces\": {\n"
-    "    \"disable-scroll\": true,\n"
-    "    \"all-outputs\": true\n"
-    "  }\n"
-    "}]\n"))
+   "[{\n"
+   "  \"layer\": \"top\",\n"
+   "  \"position\": \"top\",\n"
+   "  \"height\": 30,\n"
+   "  \"output\": [\"eDP-1\", \"HDMI-A-1\", \"*\"],\n"
+   "  \"modules-left\": [\"sway/workspaces\", \"sway/mode\"],
+"
+   "  \"modules-center\": [\"clock#week\", \"clock#year\", \"clock#time\"],
+"
+   "  \"modules-right\": [\"custom/weather\", \"network\", \"wireplumber#sink\", \"wireplumber#source\", \"battery\"],
+"
+   "  \"clock#time\": {\"interval\": 1, \"format\": \"{:%H:%M:%S}\", \"tooltip\": false},
+"
+   "  \"clock#week\": {\"format\": \"{:%a}\", \"tooltip\": false},
+"
+   "  \"clock#year\": {\"format\": \"{:%Y-%m-%d}\", \"tooltip\": false},
+"
+   "  \"battery\": {\n"
+   "    \"interval\": 1,\n"
+   "    \"format\": \"{icon} {capacity}% {time}\",
+"
+   "    \"format-time\": \" {H} h {M} m\",\n"
+   "    \"format-icons\": [\"\", \"\", \"\", \"\", \"\"],
+"
+   "    \"states\": {\"warning\": 30, \"critical\": 15},
+"
+   "    \"tooltip\": false\n"
+   "  },\n"
+   "  \"wireplumber#sink\": {\n"
+   "    \"node-type\": \"Audio/Sink\",\n"
+   "    \"format\": \"{volume}% <span color='#a6e3a1'>{icon}</span>\",
+"
+   "    \"format-muted\": \"{volume}% <span color='#f38ba8'>󰝟</span>\",
+"
+   "    \"format-icons\": [\"\", \"\", \"\"],\n"
+   "    \"max-volume\": 200,\n"
+   "    \"scroll-step\": 0.2\n"
+   "  },\n"
+   "  \"wireplumber#source\": {\n"
+   "    \"node-type\": \"Audio/Source\",\n"
+   "    \"format\": \"{volume}% <span color='#a6e3a1'></span>\",
+"
+   "    \"format-muted\": \"{volume}% <span color='#f38ba8'></span>\",
+"
+   "    \"max-volume\": 200,\n"
+   "    \"scroll-step\": 0.2\n"
+   "  },\n"
+   "  \"network\": {\n"
+   "    \"interval\": 1,\n"
+   "    \"format-ethernet\": \"<span color='#89dceb'>󰈁</span> Cable\",
+"
+   "    \"format-wifi\": \"<span color='#06b6d4'>{icon}</span> WiFi\",
+"
+   "    \"format-disconnected\": \"<span color='#eba0ac'>󰈂</span> Disconnected\",
+"
+   "    \"format-icons\": [\"󰤟\", \"󰤢\", \"󰤥\", \"󰤨\"],
+"
+   "    \"tooltip\": false\n"
+   "  },\n"
+   "  \"custom/weather\": {\n"
+   "    \"format\": \"{}°\",\n"
+   "    \"tooltip\": true,\n"
+   "    \"interval\": 3600,\n"
+   "    \"exec\": \""
+   (file-append wttrbar "/bin/wttrbar")
+   "\",\n"
+   "    \"return-type\": \"json\"\n"
+   "  },\n"
+   "  \"sway/workspaces\": {\n"
+   "    \"disable-scroll\": true,\n"
+   "    \"all-outputs\": true\n"
+   "  }\n"
+   "}]\n"))
 
 (define %waybar-style
   (plain-file "waybar-style.css"
-    "@import \"mocha.css\";
+   "@import \"mocha.css\";
 
 * {
     font-family: FontAwesome, 'Fira Code';
@@ -671,80 +669,76 @@ window#waybar {
 
 (define-public %desktop-home-environment
   (home-environment
-   (packages
-    (list
-     ;; Emacs with all packages from config/packages/emacs.scm
-     emacs-ivan
+    (packages (list
+               ;; Emacs with all packages from config/packages/emacs.scm
+               emacs-ivan
 
-     ;; Terminal
-     kitty
+               ;; Terminal
+               kitty
 
-     ;; Browser (IceCat = GNU Firefox fork, the packaged variant in Guix)
-     ;; To use upstream Firefox: add nonguix channel and swap to `firefox'
-     icecat
+               ;; Browser (IceCat = GNU Firefox fork, the packaged variant in Guix)
+               ;; To use upstream Firefox: add nonguix channel and swap to `firefox'
+               icecat
 
-     ;; Fonts
-     font-dejavu
-     font-liberation
-     font-google-noto
-     font-awesome
+               ;; Fonts
+               font-dejavu
+               font-liberation
+               font-google-noto
+               font-awesome
 
-     ;; Screenshot / clipboard
-     grim
-     slurp
-     wl-clipboard
+               ;; Screenshot / clipboard
+               grim
+               slurp
+               wl-clipboard
 
-     ;; Media
-     mpv
-     imv
+               ;; Media
+               mpv
+               imv
 
-     ;; TLS certs
-     nss-certs
+               ;; TLS certs
+               nss-certs
 
-     ;; Core CLI
-     curl
-     git
-     openssh
-     brightnessctl
-     playerctl
+               ;; Core CLI
+               curl
+               git
+               openssh
+               brightnessctl
+               playerctl
 
-     ;; Waybar utilities
-     wttrbar
-     wireplumber))
+               ;; Waybar utilities
+               wttrbar
+               wireplumber))
 
-   (services
-    (list
-     ;; User D-Bus session
-     (service home-dbus-service-type)
+    (services
+     (list
+      ;; User D-Bus session
+      (service home-dbus-service-type)
 
-     ;; PipeWire + WirePlumber (audio — required for wireplumber waybar module)
-     (service home-pipewire-service-type)
+      ;; PipeWire + WirePlumber (audio — required for wireplumber waybar module)
+      (service home-pipewire-service-type)
 
-     ;; Sway (swayfx)
-     (service home-sway-service-type %sway-config)
+      ;; Sway (swayfx)
+      (service home-sway-service-type %sway-config)
 
-     ;; Wallpaper daemon — rotates images from ~/Pictures/bg every 10 minutes.
-     ;; Writes ~/.config/wpaperd/wallpaper.toml and registers a shepherd service.
-     (service home-wpaperd-service-type
-              (home-wpaperd-configuration
-               (path     "~/Pictures/bg")
-               (duration "10m")))
+      ;; Wallpaper daemon — rotates images from ~/Pictures/bg every 10 minutes.
+      ;; Writes ~/.config/wpaperd/wallpaper.toml and registers a shepherd service.
+      (service home-wpaperd-service-type
+               (home-wpaperd-configuration (path "~/Pictures/bg")
+                                           (duration "10m")))
 
-     ;; Emacs init files:
-     ;;   ~/.emacs.d/emacs.org  — the literate config
-     ;;   ~/.emacs.d/init.el    — bootstrapper that loads emacs.org via org-babel
-     (service home-files-service-type
-      `((".emacs.d/emacs.org"
-         ,(local-file "emacs.org"))
-        (".emacs.d/init.el"
-         ,(plain-file "init.el"
-           ";; init.el — generated by systems/common.scm
+      ;; Emacs init files:
+      ;; ~/.emacs.d/emacs.org  — the literate config
+      ;; ~/.emacs.d/init.el    — bootstrapper that loads emacs.org via org-babel
+      (service home-files-service-type
+               `((".emacs.d/emacs.org" ,(local-file "emacs.org"))
+                 (".emacs.d/init.el" ,(plain-file "init.el"
+                                       ";; init.el — generated by systems/common.scm
 ;; Loads the literate config from emacs.org via org-babel.
 (require 'org)
 (org-babel-load-file
  (expand-file-name \"emacs.org\" user-emacs-directory))
 "))
-        ;; Waybar
-        (".config/waybar/config"   ,%waybar-config)
-        (".config/waybar/style.css" ,%waybar-style)
-        (".config/waybar/mocha.css" ,(local-file "mocha.css"))))))))
+                 ;; Waybar
+                 (".config/waybar/config" ,%waybar-config)
+                 (".config/waybar/style.css" ,%waybar-style)
+                 (".config/waybar/mocha.css" ,(local-file "mocha.css"))))))))

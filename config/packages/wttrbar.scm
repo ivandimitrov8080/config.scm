@@ -3,9 +3,10 @@
   #:use-module (guix git-download)
   #:use-module (guix utils)
   #:use-module (guix build-system cargo)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages tls)           ; openssl
-  #:use-module (gnu packages pkg-config)    ; pkg-config
+  #:use-module ((guix licenses)
+                #:prefix license:)
+  #:use-module (gnu packages tls) ;openssl
+  #:use-module (gnu packages pkg-config) ;pkg-config
   #:use-module (config packages wttrbar-crates)
   #:export (wttrbar))
 
@@ -25,7 +26,9 @@
          (sha256
           (base32 "0nl7dv61i0gwjvywj5r2ism1g44bix4pqayg0i3gn33sm1va5l6f"))))
       (build-system cargo-build-system)
-      (arguments (list #:install-source? #f))
+      (arguments
+       (list
+        #:install-source? #f))
       (inputs (cargo-inputs 'wttrbar
                             #:module '(config packages wttrbar-crates)))
       (native-inputs (list pkg-config))

@@ -11,10 +11,11 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
-  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module ((guix licenses)
+                #:prefix license:)
   #:use-module (gnu packages python)
-  #:use-module (gnu packages python-xyz)     ; python-networkx
-  #:use-module (gnu packages python-build)   ; python-pygments
+  #:use-module (gnu packages python-xyz) ;python-networkx
+  #:use-module (gnu packages python-build) ;python-pygments
   #:export (emacs-emigo))
 
 (define-public emacs-emigo
@@ -36,10 +37,7 @@
       (build-system emacs-build-system)
       ;; emigo spawns a Python subprocess for its AI backend.
       ;; These are runtime dependencies placed on PATH via propagated-inputs.
-      (propagated-inputs
-       (list python
-             python-networkx
-             python-pygments))
+      (propagated-inputs (list python python-networkx python-pygments))
       (synopsis "Agentic AI coding assistant for Emacs")
       (description
        "Emigo is an agentic AI coding plugin for Emacs.  It spawns a Python

@@ -12,10 +12,11 @@
   #:use-module (guix download)
   #:use-module (guix build-system cargo)
   #:use-module (guix gexp)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages freedesktop)   ; wayland
-  #:use-module (gnu packages gl)            ; mesa
-  #:use-module (gnu packages pkg-config)    ; pkg-config
+  #:use-module ((guix licenses)
+                #:prefix license:)
+  #:use-module (gnu packages freedesktop) ;wayland
+  #:use-module (gnu packages gl) ;mesa
+  #:use-module (gnu packages pkg-config) ;pkg-config
   #:use-module (config packages wpaperd-crates)
   #:export (wpaperd))
 
@@ -43,9 +44,9 @@
       ;; Disable the default jemalloc feature: tikv-jemalloc-sys requires
       ;; autoconf/config.sub which are not available in the Guix sandbox.
       ;; The daemon falls back to the system allocator transparently.
-       #:cargo-build-flags ''("--workspace" "--no-default-features" "--release")
-       ;; Pass the same flags to cargo test.
-       #:cargo-test-flags ''("--workspace" "--no-default-features")
+      #:cargo-build-flags ''("--workspace" "--no-default-features" "--release")
+      ;; Pass the same flags to cargo test.
+      #:cargo-test-flags ''("--workspace" "--no-default-features")
       ;; The root Cargo.toml is a virtual workspace manifest — cargo install
       ;; --path . would fail.  Replace the install phase with a simple binary
       ;; copy from the target directory built above.
@@ -61,16 +62,13 @@
                           (list "target/release/wpaperd"
                                 "target/release/wpaperctl"))))))))
 
-    (inputs
-     (cargo-inputs 'wpaperd
-                   #:module '(config packages wpaperd-crates)))
+    (inputs (cargo-inputs 'wpaperd
+                          #:module '(config packages wpaperd-crates)))
 
-    (native-inputs
-     (list pkg-config))
+    (native-inputs (list pkg-config))
 
     ;; wayland-egl and khronos-egl (OpenGL/EGL) are linked at runtime.
-    (propagated-inputs
-     (list wayland mesa))
+    (propagated-inputs (list wayland mesa))
 
     (home-page "https://github.com/danyspin97/wpaperd")
     (synopsis "Wallpaper daemon for Wayland")

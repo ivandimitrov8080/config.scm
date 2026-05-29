@@ -8,7 +8,8 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
-  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module ((guix licenses)
+                #:prefix license:)
   #:export (emacs-ob-nix))
 
 (define-public emacs-ob-nix

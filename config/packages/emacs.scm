@@ -18,11 +18,10 @@
   #:use-module (guix packages)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
-  #:use-module (gnu packages mail)         ; notmuch
+  #:use-module (gnu packages mail) ;notmuch
   #:use-module (config packages ob-nix)
   #:use-module (config packages emigo)
-  #:export (emacs-ivan
-            %emacs-packages))
+  #:export (emacs-ivan %emacs-packages))
 
 ;; ---------------------------------------------------------------------------
 ;; All Emacs packages to bundle.
@@ -41,8 +40,8 @@
 
    ;; --- AI / agents ---
    emacs-gptel
-   emacs-emigo               ; custom: config/packages/emigo.scm
-
+   emacs-emigo ;custom: config/packages/emigo.scm
+   
    ;; --- Navigation & editing ---
    emacs-avy
    emacs-multiple-cursors
@@ -59,7 +58,7 @@
    ;; --- LSP ---
    ;; eglot is built into Emacs 29+; no separate package needed.
    ;; Language servers are installed system-wide (see systems/desktop.scm).
-
+   
    ;; --- Language modes ---
    emacs-nix-mode
    emacs-elm-mode
@@ -72,8 +71,8 @@
 
    ;; --- Org ---
    emacs-htmlize
-   emacs-ob-nix              ; custom: config/packages/ob-nix.scm
-
+   emacs-ob-nix ;custom: config/packages/ob-nix.scm
+   
    ;; --- Tree-sitter (built-in treesit, Emacs 29+) ---
    ;; The old MELPA tree-sitter dynamic module is not in Guix.
    ;; emacs-treesit-auto provides automatic grammar management.
@@ -110,6 +109,5 @@
     (description
      "emacs-pgtk bundled with every Emacs package referenced by
 @file{systems/emacs.org}.  Drop-in replacement for @code{emacs-pgtk}.")
-    (propagated-inputs
-     (append %emacs-packages
-             (package-propagated-inputs emacs-pgtk)))))
+    (propagated-inputs (append %emacs-packages
+                               (package-propagated-inputs emacs-pgtk)))))
