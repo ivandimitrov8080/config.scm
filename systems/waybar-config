@@ -1,0 +1,54 @@
+[{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "output": ["eDP-1", "HDMI-A-1", "*"],
+  "modules-left": ["sway/workspaces", "sway/mode"],
+  "modules-center": ["clock#week", "clock#year", "clock#time"],
+  "modules-right": ["custom/weather", "network", "wireplumber#sink", "wireplumber#source", "battery"],
+  "clock#time": {"interval": 1, "format": "{:%H:%M:%S}", "tooltip": false},
+  "clock#week": {"format": "{:%a}", "tooltip": false},
+  "clock#year": {"format": "{:%Y-%m-%d}", "tooltip": false},
+  "battery": {
+    "interval": 1,
+    "format": "{icon} {capacity}% {time}",
+    "format-time": " {H} h {M} m",
+    "format-icons": ["", "", "", "", ""],
+    "states": {"warning": 30, "critical": 15},
+    "tooltip": false
+  },
+  "wireplumber#sink": {
+    "node-type": "Audio/Sink",
+    "format": "{volume}% <span color='#a6e3a1'>{icon}</span>",
+    "format-muted": "{volume}% <span color='#f38ba8'>󰝟</span>",
+    "format-icons": ["", "", ""],
+    "max-volume": 200,
+    "scroll-step": 0.2
+  },
+  "wireplumber#source": {
+    "node-type": "Audio/Source",
+    "format": "{volume}% <span color='#a6e3a1'></span>",
+    "format-muted": "{volume}% <span color='#f38ba8'></span>",
+    "max-volume": 200,
+    "scroll-step": 0.2
+  },
+  "network": {
+    "interval": 1,
+    "format-ethernet": "<span color='#89dceb'>󰈁</span> Cable",
+    "format-wifi": "<span color='#06b6d4'>{icon}</span> WiFi",
+    "format-disconnected": "<span color='#eba0ac'>󰈂</span> Disconnected",
+    "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
+    "tooltip": false
+  },
+  "custom/weather": {
+    "format": "{}°",
+    "tooltip": true,
+    "interval": 3600,
+    "exec": "wttrbar",
+    "return-type": "json"
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true
+  }
+}]
