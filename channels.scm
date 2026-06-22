@@ -7,10 +7,10 @@
 ;; After pushing the repo for the first time, pin the config channel by
 ;; adding: (commit "FIRST-COMMIT-HASH") and removing (branch "master").
 
-(define-module (channels)
-  )
+(define-module (channels))
 
 (use-modules (gnu packages nss))
+(use-modules (guix channels))
 
 (list (channel
         (name 'guix)
