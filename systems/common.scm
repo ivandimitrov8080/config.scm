@@ -285,7 +285,7 @@ so the daemon starts automatically with the user session.")))
 
                       (keybindings %sway-keybindings)
 
-                      (startup-programs (list "exec kitty"))
+                      (startup-programs (list "exec kitty" "exec wpaperd"))
 
                       (startup+reload-programs (list "kanshi"))
 
@@ -351,10 +351,15 @@ so the daemon starts automatically with the user session.")))
 (org-babel-load-file
  (expand-file-name \"emacs.org\" user-emacs-directory))
 "))
-                      ;; Waybar
-                      (".config/waybar/config" ,%waybar-config)
-                      (".config/waybar/style.css" ,%waybar-style)
-                      (".config/waybar/mocha.css" ,(local-file "mocha.css"))
-                      ("Pictures/bg/wallpaper.jpeg" ,(local-file
-                                                      "../wallpaper.jpeg"))))))))
+                       ;; Kitty
+                       (".config/kitty/kitty.conf" ,(plain-file "kitty.conf"
+                                                     "background_opacity 0.80
+background_blur 1
+"))
+                       ;; Waybar
+                       (".config/waybar/config" ,%waybar-config)
+                       (".config/waybar/style.css" ,%waybar-style)
+                       (".config/waybar/mocha.css" ,(local-file "mocha.css"))
+                       ("Pictures/bg/wallpaper.jpeg" ,(local-file
+                                                       "../wallpaper.jpeg"))))))))
 
