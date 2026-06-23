@@ -50,6 +50,7 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages video)
   #:use-module (gnu packages vim)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages web)
   #:use-module (gnu packages wget)
   #:use-module (gnu packages wm)
@@ -325,9 +326,10 @@ so the daemon starts automatically with the user session.")))
                     git
                     openssh
                     brightnessctl
-                    playerctl
-                    wttrbar
-                    wireplumber))
+                     playerctl
+                     python
+                     wttrbar
+                     wireplumber))
 
     (services
      (list (service home-dbus-service-type)
