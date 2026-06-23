@@ -22,10 +22,11 @@
     (services
      (cons (service home-bash-service-type
                     (home-bash-configuration
-                     (bash-profile (list (plain-file "sway-autostart"
-                                          "# Auto-start sway on tty1
+                     (bash-profile (list (plain-file "sway-autostart" "
 if [ \"$(tty)\" = \"/dev/tty1\" ] && [ -z \"$WAYLAND_DISPLAY\" ]; then
-
+    export WLR_RENDERER=gles2
+    export WLR_RENDERER_ALLOW_SOFTWARE=1
+    exec sway
 fi
 ")))))
            (home-environment-user-services %desktop-home-environment)))))
@@ -33,7 +34,7 @@ fi
 (operating-system
   (host-name "guix-vm")
   (timezone "UTC")
-  (locale "en_US.utf8")
+  (locale "en_US.UTF-8")
   (keyboard-layout %my-keyboard-layout)
 
   (firmware '())
